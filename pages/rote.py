@@ -29,14 +29,43 @@ class Rote():
             )
         )
         
-        if self.page.route == "/store":
+        if self.page.route == "/ins":
             self.page.views.append(
                 ft.View(
-                    "/store",
-                    [],
+                    "/ins",
+                    [
+                        b.build_layout()
+                    ],
                 )
             )
-            
+        elif self.page.route == "/test":
+            self.page.views.append(
+                ft.View(
+                    "/test",
+                    [
+                        b.build_layout()
+                    ],
+                )
+            )
+        elif self.page.route == "/res":
+            self.page.views.append(
+                ft.View(
+                    "/res",
+                    [
+                        b.build_layout()
+                    ],
+                )
+            )
+
+        elif self.page.route == "/res":
+            self.page.views.append(
+                ft.View(
+                    "/per",
+                    [
+                        b.build_layout()
+                    ],
+                )
+            )    
         self.page.update()
 
     def view_pop(self,view):

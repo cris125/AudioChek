@@ -2,90 +2,56 @@ import flet as ft
 
 class Navegation:
     def navegation(self, page: ft.Page):
-        self.page=page
-        # Contenedor para Instrucciones
-        con_inst = ft.Container(
-            content=ft.Column(
-                [
-                    ft.Text("Instrucciones", size=11, weight=ft.FontWeight.BOLD,color=ft.colors.WHITE),
-                    ft.Icon(name=ft.icons.INTEGRATION_INSTRUCTIONS_OUTLINED, size=35,color=ft.colors.WHITE),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            ),
-            on_click=self.on_click,
-            data="ins",
-            bgcolor=ft.colors.TEAL_400,
-            border_radius=10,
-            expand=True  # Se ajusta al espacio disponible
-        )
+        self.page = page
 
-        # Contenedor para Test Audiometría
-        con_test = ft.Container(
-            content=ft.Column(
-                [
-                    ft.Text("Test Audiometría", size=11, weight=ft.FontWeight.BOLD,color=ft.colors.WHITE),
-                    ft.Icon(name=ft.icons.HEARING_OUTLINED, size=35,color=ft.colors.WHITE),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            ),
-            on_click=self.on_click,
-            data="test",
-            bgcolor=ft.colors.TEAL_400,
-            border_radius=10,
-            expand=True  # Se ajusta al espacio disponible
-        )
+        # Crear diccionarios para gestionar los textos y rutas
+        texts = {
+            "/ins": ("Instrucciones", ft.icons.INTEGRATION_INSTRUCTIONS_OUTLINED),
+            "/test": ("Audiometría", ft.icons.HEARING_OUTLINED),
+            "/res": ("Resultados", ft.icons.FACT_CHECK_ROUNDED),
+            "/per": ("Perfil", ft.icons.FACT_CHECK_ROUNDED),
+        }
+        
+        # Asignar los valores de texto e íconos según la ruta
+        text, icon = texts.get(self.page.route, ("", None))
 
-        # Contenedor para Resultados
-        con_results = ft.Container(
-            content=ft.Column(
-                [
-                    ft.Text("Resultados", size=11, weight=ft.FontWeight.BOLD,color=ft.colors.WHITE),
-                    ft.Icon(name=ft.icons.FACT_CHECK_ROUNDED, size=35,color=ft.colors.WHITE),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            ),
-            on_click=self.on_click,
-            data="res",
-            bgcolor=ft.colors.TEAL_400,
-            border_radius=10,
-            expand=True  # Se ajusta al espacio disponible
-        )
+        # Crear contenedores para cada sección
+        sections = []
+        for route, (label, icon_name) in texts.items():
+            is_active = route == self.page.route  # Verificar si es la ruta activa
+            text_size = 11 if is_active else 0  # Asignar tamaño del texto
+            container_height = None if is_active else 50  # Asignar ancho del contenedor
 
-        con_data = ft.Container(
-            content=ft.Column(
-                [
-                    ft.Text("Perfil", size=11, weight=ft.FontWeight.BOLD,color=ft.colors.WHITE),
-                    ft.Icon(name=ft.icons.FACT_CHECK_ROUNDED,  size=35,color=ft.colors.WHITE),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            ),
-            on_click=self.on_click,
-            data="per",
-            bgcolor=ft.colors.TEAL_400,
-            border_radius=10,
-            expand=True  # Se ajusta al espacio disponible
-        )
+            sections.append(
+                ft.Container(
+                    content=ft.Column(
+                        [
+                            ft.Text(label if is_active else "", size=text_size, 
+                                    weight=ft.FontWeight.BOLD, color=ft.colors.WHITE),
+                            ft.Icon(name=icon_name, size=35, color=ft.colors.WHITE)
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                    ),
+                    on_click=self.on_click,
+                    data=route.strip("/"),
+                    bgcolor=ft.colors.TEAL_200 if is_active else ft.colors.TEAL_400,
+                    border_radius=10,
+                    expand=True,
+                    height=container_height # Ancho del contenedor cuando no está activo
+                )
+            )
+
         # Fila con los contenedores
         row = ft.Row(
-            [con_inst, con_test, con_results,con_data],
+            sections,
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=10,
-            expand=True  # Fila expandida para ajustarse al ancho de la pantalla
+            expand=True
         )
 
         return row
 
     def on_click(self, e):
-        if e.control.data == "ins":
-            print(self.page.route)
-            print("Instrucciones")
-        elif e.control.data == "test":
-            print("Test Audiometría")
-        elif e.control.data == "res":
-            print("Resultados")
-        elif e.control.data == "per":
-            print("Perfil")
+        self.page.go(f"/{e.control.data}")
+        print(e.control.data.capitalize())
