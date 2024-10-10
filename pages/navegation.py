@@ -9,36 +9,39 @@ class Navegation:
             "/ins": ("Instrucciones", ft.icons.INTEGRATION_INSTRUCTIONS_OUTLINED),
             "/test": ("Audiometría", ft.icons.HEARING_OUTLINED),
             "/res": ("Resultados", ft.icons.FACT_CHECK_ROUNDED),
-            "/per": ("Perfil", ft.icons.FACT_CHECK_ROUNDED),
+            "/per": ("Perfil", ft.icons.ACCOUNT_CIRCLE),
         }
         
-        # Asignar los valores de texto e íconos según la ruta
-        text, icon = texts.get(self.page.route, ("", None))
-
+        # Colores
+        active_color = ft.colors.BLUE_600
+        inactive_color = ft.colors.BLUE_300
+        text_color_active = ft.colors.WHITE
+        text_color_inactive = ft.colors.BLACK
+        
         # Crear contenedores para cada sección
         sections = []
         for route, (label, icon_name) in texts.items():
             is_active = route == self.page.route  # Verificar si es la ruta activa
-            text_size = 11 if is_active else 0  # Asignar tamaño del texto
-            container_height = None if is_active else 50  # Asignar ancho del contenedor
+            text_size = 11 if is_active else 0  # Ajustar tamaño del texto
+            container_height = None if is_active else 50  # Alto del contenedor
 
             sections.append(
                 ft.Container(
                     content=ft.Column(
                         [
                             ft.Text(label if is_active else "", size=text_size, 
-                                    weight=ft.FontWeight.BOLD, color=ft.colors.WHITE),
-                            ft.Icon(name=icon_name, size=35, color=ft.colors.WHITE)
+                                    weight=ft.FontWeight.BOLD, color=text_color_active if is_active else text_color_inactive),
+                            ft.Icon(name=icon_name, size=30, color=text_color_active if is_active else text_color_inactive)
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER
                     ),
                     on_click=self.on_click,
                     data=route.strip("/"),
-                    bgcolor=ft.colors.TEAL_200 if is_active else ft.colors.TEAL_400,
+                    bgcolor=active_color if is_active else inactive_color,
                     border_radius=10,
                     expand=True,
-                    height=container_height # Ancho del contenedor cuando no está activo
+                    height=container_height
                 )
             )
 

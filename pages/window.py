@@ -1,6 +1,6 @@
 import flet as ft
 class LayoutManager:
-    def __init__(self, main_row: ft.Row, navigation_row: ft.Row):
+    def __init__(self, main_row, navigation_row):
         self.main_row = main_row
         self.navigation_row = navigation_row
 
@@ -15,7 +15,10 @@ class LayoutManager:
                 ft.Container(
                     content=self.navigation_row,
                     expand=3,  # Ocupa el 10% de la pantalla
-                    alignment=ft.alignment.center,
+                    alignment=ft.alignment.bottom_center,
+                    bgcolor=ft.colors.BLUE_400,
+                    border_radius=15
+                    
                      # Fondo para diferenciar la navegación
                 ),
             ],
