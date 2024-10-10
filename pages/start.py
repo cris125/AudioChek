@@ -27,7 +27,7 @@ class Start:
         
         # Botón para seleccionar la fecha de nacimiento
         btn_date = ft.ElevatedButton(
-            "Seleccionar Fecha \n de Nacimiento",width=200,
+            "Seleccionar \nFecha de \nNacimiento",width=200,
             icon=ft.icons.CALENDAR_MONTH,
             on_click=lambda e: self.page.open(
                 ft.DatePicker(on_change=self.on_change)

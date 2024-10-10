@@ -4,7 +4,7 @@ from .window import LayoutManager
 from .navegation import Navegation
 from .profile import Profile
 from .instructions import Instructions
-
+from .audiometria import Audiometria
 class Rote:
     def main(self, page: ft.Page):
         page.title = "AudioCheck"
@@ -14,7 +14,7 @@ class Rote:
         self.page = page
         self.page.on_route_change = self.route_change
         self.page.on_view_pop = self.view_pop
-        self.page.client_storage.clear()
+        """self.page.client_storage.clear()"""
         # Verificar si ya hay un nombre guardado y redirigir según sea necesario
         if self.page.client_storage.contains_key("name"):
             # Redirigir directamente al perfil si ya existe el nombre
@@ -59,8 +59,8 @@ class Rote:
                 )
             )
         elif self.page.route == "/test":
-            ins=Instructions()
-            ins_nav = LayoutManager(ins.instructions(self.page), nav.navegation(self.page))
+            aud=Audiometria()
+            ins_nav = LayoutManager(aud.audiometria(self.page), nav.navegation(self.page))
             self.page.views.append(
                 ft.View(
                     "/test",
