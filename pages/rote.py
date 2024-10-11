@@ -58,13 +58,25 @@ class Rote:
                     [ins_nav.build_layout()],
                 )
             )
+        
+            
         elif self.page.route == "/test":
             aud=Audiometria()
-            ins_nav = LayoutManager(aud.audiometria(self.page), nav.navegation(self.page))
+            ins_nav = LayoutManager(aud.audiometria_ins(self.page), nav.navegation(self.page))
             self.page.views.append(
                 ft.View(
                     "/test",
                     [ ins_nav.build_layout()],
+                )
+            )
+            
+        elif self.page.route== "/test/audiometria":
+            ins=Instructions()
+            ins_nav = LayoutManager(ins.instructions(self.page), nav.navegation(self.page))
+            self.page.views.append(
+                ft.View(
+                    "/test/audiometria",
+                    [ft.Text(value="xdxd")],
                 )
             )
         elif self.page.route == "/res":
