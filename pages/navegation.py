@@ -7,7 +7,7 @@ class Navegation:
         # Crear diccionarios para gestionar los textos y rutas
         texts = {
             "/ins": ("Instrucciones", ft.icons.INTEGRATION_INSTRUCTIONS_OUTLINED),
-            "/test": ("Audiometría", ft.icons.HEARING_OUTLINED),
+            "/test": ("Audiometría", ft.icons.NOISE_CONTROL_OFF_SHARP),
             "/res": ("Resultados", ft.icons.FACT_CHECK_ROUNDED),
             "/per": ("Perfil", ft.icons.ACCOUNT_CIRCLE),
         }

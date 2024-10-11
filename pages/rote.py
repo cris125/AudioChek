@@ -62,7 +62,7 @@ class Rote:
             
         elif self.page.route == "/test":
             aud=Audiometria()
-            ins_nav = LayoutManager(aud.audiometria_ins(self.page), nav.navegation(self.page))
+            ins_nav = LayoutManager(aud.test_audiometria(self.page), nav.navegation(self.page))
             self.page.views.append(
                 ft.View(
                     "/test",

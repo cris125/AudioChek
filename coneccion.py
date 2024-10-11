@@ -1,16 +1,33 @@
 import mysql.connector
+from mysql.connector import Error
 
-# Establecer la conexión
-connection = mysql.connector.connect(
-    host="181.79.5.78",        # IP del servidor de base de datos
-    user="root",               # Usuario de la base de datos
-    password="P4ng0l1n854",     # Contraseña del usuario
-    database="db1"             # Nombre de la base de datos
-)
+def insertar_usuario(nombre):
+    connection=None
+    try:
+        connection = mysql.connector.connect(
+            host='181.79.5.78',
+            user='root',
+            password='P4ng0l1n854',
+            port=33306,
+            database='audicheck'
+        )
 
-# Verificar si la conexión fue exitosa
-if connection.is_connected():
-    print("Conexión exitosa a la base de datos")
+        if connection.is_connected():
+            cursor = connection.cursor()
+            query = "INSERT INTO 'usuarios' ('nombre') VALUES (%s)"
+            values = (nombre)
+            cursor.execute(query, values)
+            connection.commit()
+            print(f"Usuario '{nombre}' insertado correctamente")
 
-# Cerrar la conexión
-connection.close()
+    except Error as e:
+        print(f"Error al insertar usuario: {e}")
+    
+    finally:
+        if connection:
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+
+# Llamada al método para insertar un usuario
+insertar_usuario("J")
