@@ -1,12 +1,18 @@
 import flet as ft
+import random 
 import time
 class Audiometria():
     def __init__(self) -> None:
         self.numImg = 0
         self.images = ["./assets/hora.png", "./assets/lugar_silencioso.png", "./assets/uso_audifonos.png"]
-        self.fre = ['./assets/8000.wav','./assets/9000.wav','./assets/10000.wav','./assets/11000.wav','./assets/12000.wav','./assets/13000.wav','./assets/14000.wav','./assets/15000.wav','./assets/16000.wav','./assets/17000.wav','./assets/18000.wav','./assets/19000.wav','./assets/20000.wav']
-        self.vol=[i/10 for i in range(10,-1,-1)]
+        self.fre = ['./assets/8000.wav','./assets/10000.wav','./assets/12000.wav','./assets/12000.wav','./assets/15000.wav','./assets/16000.wav','./assets/17000.wav','./assets/18000.wav','./assets/19000.wav','./assets/20000.wav']
+        self.fre_dic={'./assets/8000.wav': 8000,'./assets/10000.wav': 10000,'./assets/12000.wav': 12000,'./assets/15000.wav': 15000,'./assets/16000.wav': 16000,'./assets/17000.wav': 17000,'./assets/18000.wav': 18000,'./assets/19000.wav': 19000,'./assets/20000.wav': 20000}
 
+        random.shuffle(self.fre )
+        self.vol=[0.03,0.07,0.15,0.2,0.4,0.6,0.8,0.9,1]
+        self.current_fre=0
+        self.current_vol=0
+        self.resul={}
     import flet as ft
 
     def test_audiometria(self, page: ft.Page):
@@ -79,79 +85,109 @@ class Audiometria():
         )
         
         return self.row_audiometria
-    def start_test(self,e):
-        txt_test=ft.Text(value="Preciona 'si' si escuchas el \nsonido y 'no' si no lo escuchas" ,size=25)
-        btn_yes=ft.ElevatedButton("Si",icon=ft.icons.CHECK,on_click=None)
-        btn_no=ft.ElevatedButton("No",on_click=None,icon=ft.icons.MUSIC_OFF_SHARP)
-        icon_yes=ft.Icon(name=ft.icons.MUSIC_NOTE)
-        icon_no=ft.Icon(name=ft.icons.MUSIC_OFF_SHARP)
+    def next_test(self, e, balance=0):
+        data = e.control.data
+        self.current_audio.release()
+        self.current_audio.update()
+        if data == "yes":
+            # Si el usuario escucha el sonido
+            self.resul.update({self.fre_dic[self.fre[self.current_fre]]: [self.vol[self.current_vol] ,balance] })
+            # Avanzar en la frecuencia
+            if self.current_fre < len(self.fre) - 1:
+                self.current_fre += 1
+                self.current_vol = 0 
+            else:
+                if balance == 1:
+                        self.current_fre = 0
+                        self.current_vol = 0 
+                        balance=-1
+                else:
+                    if balance == 1 or balance == -1:
+                        self.page.client_storage.set("res_test_big",self.resul)
+                    else:
+                        self.page.client_storage.set("res_test_small",self.resul)
+                    self.page.go("/res")  # Si llegamos al final, mostrar resultados
+                    return
+        else:
+            # Si no escucha, avanzamos en el volumen
+            if self.current_vol < len(self.vol) - 1:
+                self.current_vol += 1
+            else:
+                self.resul.update({self.fre_dic[self.fre[self.current_fre]]:[None,balance]})  
+                if self.current_fre < len(self.fre) - 1:
+                    self.current_fre += 1
+                    self.current_vol = 0 
+                else:
+                    if balance == 1:
+                        self.current_fre = 0
+                        self.current_vol = 0 
+                        balance=-1
+                    else:
+                        if balance == 1 or balance == -1:
+                            self.page.client_storage.set("res_test_big",self.resul)
+                        else:
+                            self.page.client_storage.set("res_test_small",self.resul)
+                        self.page.go("/res")  # Si llegamos al final, mostrar resultados
+                        return
+                    
 
-        test=e.control.data
-        for i in range(1,6):
-            
+        # Actualizamos la interfaz con la nueva prueba
+        self.update_test(balance)
+
+    def update_test(self, balance):
+        """Actualiza la interfaz y reproduce el audio con la frecuencia y volumen actual."""
+        txt_test = ft.Text(value="Presiona 'Sí' si escuchas el sonido, 'No' si no lo escuchas", size=25)
+        # Limpiamos el contenido anterior y mostramos la nueva prueba
+        self.row_audiometria.controls.clear()
+        
+        self.current_audio=ft.Audio(src=self.fre[self.current_fre], autoplay=True, volume=self.vol[self.current_vol], balance=balance)
+        self.row_audiometria.controls.append(
+            ft.Column([
+                txt_test,
+                self.current_audio,
+                ft.ElevatedButton("Sí", icon=ft.icons.CHECK, on_click=lambda e: self.next_test(e, balance), data="yes"),
+                ft.ElevatedButton("No", on_click=lambda e: self.next_test(e, balance), icon=ft.icons.MUSIC_OFF_SHARP, data="no")
+            ])
+        )
+        print(self.resul)
+        self.page.update()
+        
+
+    def audiometria_test_big(self):
+        """Realiza la prueba grande para ambos oídos."""
+        self.update_test(balance=1)  # Comenzamos con el oído derecho (balance 1) #
+        # Luego pasaremos al izquierdo una vez que termine el derecho (esto puede manejarse con estados adicionales)
+
+    def audiometria_test_small(self, e=None):
+        """Realiza la prueba pequeña."""
+        self.update_test(balance=0)  # Sin balance (prueba general)
+
+    def start_test(self, e):
+        """Inicia la prueba con una cuenta regresiva."""
+        test = e.control.data
+        for i in range(1, 2):
+            # Limpiamos y mostramos la cuenta regresiva
             self.row_audiometria.controls.clear()
-            self.row_audiometria.controls=[ft.Container(
-            content=ft.Text(value=f"La prueba inicia en {i} seg",style=ft.TextThemeStyle.LABEL_MEDIUM, 
-                            color=ft.colors.WHITE,size=20),
-            padding=20,
-            border_radius=10,
-            bgcolor=ft.colors.LIGHT_BLUE_200,
-            expand=True,
-            alignment=ft.alignment.center,
-            )]
-            time.sleep(1)
+            self.row_audiometria.controls.append(
+                ft.Container(
+                    content=ft.Text(value=f"La prueba inicia en {i} segundos",
+                                    style=ft.TextThemeStyle.LABEL_MEDIUM, 
+                                    color=ft.colors.WHITE, 
+                                    size=20),
+                    padding=20,
+                    border_radius=10,
+                    bgcolor=ft.colors.LIGHT_BLUE_200,
+                    expand=True,
+                    alignment=ft.alignment.center,
+                )
+            )
             self.page.update()
 
-        if test: #prueba grande
-            resultados=[]
-            for fre in range(len(self.fre)):
-                
-                for vol in range(len(self.vol)):
-                    print(vol,fre)
-                    self.row_audiometria.controls.clear()
-                    self.row_audiometria.controls=[
-                        ft.Column([
-                        txt_test,
-                        ft.Audio(src=self.fre[fre],autoplay=True,volume=self.vol[vol]),
-                        ft.ElevatedButton("Si",icon=ft.icons.CHECK,on_click=None),
-                        ft.ElevatedButton("No",on_click=None,icon=ft.icons.MUSIC_OFF_SHARP)
-                        ]),
-                    ]
-
-                    self.page.update()
-
-        else:
-            # oido derecho
-            for fre in range(len(self.fre)):
-                for vol in range(len(self.vol)):
-                    print(vol,fre)
-                    self.row_audiometria.controls.clear()
-                    self.row_audiometria.controls=[
-                        ft.Column([
-                        txt_test,
-                        ft.Audio(src=self.fre[fre],autoplay=True,volume=self.vol[vol] ,balance=1),
-                        ft.ElevatedButton("Si",icon=ft.icons.CHECK,on_click=None),
-                        ft.ElevatedButton("No",on_click=None,icon=ft.icons.MUSIC_OFF_SHARP)
-                        ]),
-                    ]
-
-                    self.page.update()
-            #oido izquierdo
-            for fre in range(len(self.fre)):
-                for vol in range(len(self.vol)):
-                    print(vol,fre)
-                    self.row_audiometria.controls.clear()
-                    self.row_audiometria.controls=[
-                        ft.Column([
-                        txt_test,
-                        ft.Audio(src=self.fre[fre],autoplay=True,volume=self.vol[vol] ,balance=1),
-                        ft.ElevatedButton("Si",icon=ft.icons.CHECK,on_click=None),
-                        ft.ElevatedButton("No",on_click=None,icon=ft.icons.MUSIC_OFF_SHARP)
-                        ]),
-                    ]
-
-                    self.page.update()
-
+        if test:  # Prueba grande
+            self.audiometria_test_big()
+        else:  # Prueba pequeña
+            self.audiometria_test_small()
+        
 
     def test(self,e):
         test=e.control.data

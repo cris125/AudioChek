@@ -7,6 +7,7 @@ from .instructions import Instructions
 from .audiometria import Audiometria
 class Rote:
     def main(self, page: ft.Page):
+        
         page.title = "AudioCheck"
         page.vertical_alignment = ft.MainAxisAlignment.CENTER
         page.window.width = 400
@@ -14,9 +15,9 @@ class Rote:
         self.page = page
         self.page.on_route_change = self.route_change
         self.page.on_view_pop = self.view_pop
-        """self.page.client_storage.clear()"""
+        self.page.client_storage.clear()
         # Verificar si ya hay un nombre guardado y redirigir según sea necesario
-        if self.page.client_storage.contains_key("name"):
+        if self.page.client_storage.contains_key("id"):
             # Redirigir directamente al perfil si ya existe el nombre
             self.page.go("/per")
         else:

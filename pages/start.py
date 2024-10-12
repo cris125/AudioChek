@@ -1,13 +1,30 @@
 import flet as ft
+import time
+import hashlib
+from api.api_functions import Api_functions
+
 
 class Start:
+    def id_unique(self):
+        data=self.txt_name.value
+        str_id = str(time)+data
+        id = hashlib.sha256(str_id.encode()).hexdigest()
+        return(id)
     def on_cl(self, e):
+        id_un=self.id_unique()
         # Guardar la información en el almacenamiento local
         self.page.client_storage.set("name", self.txt_name.value)
         self.page.client_storage.set("email", self.txt_email.value)
         self.page.client_storage.set("date", self.date_age.value)
         self.page.client_storage.set("gender", self.gender.value)  # Guardar el género seleccionado
         self.page.client_storage.set("occupation", self.occupation.value)  # Guardar la ocupación seleccionada
+        self.page.client_storage.set("id",id_un )  
+        api=Api_functions()
+        api.add_user(id=id_un,name=self.txt_name.value,
+                     email=self.txt_email.value,
+                     date=self.date_age.value,
+                     gender=self.gender.value,
+                     occupation=self.occupation.value)
         self.page.go("/per")
 
     def on_change(self, e):

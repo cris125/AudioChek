@@ -17,7 +17,10 @@ class Profile:
         # Limpiar la columna y cargar el perfil actualizado
         self.page.go("/ins")
         self.page.go("/per")
-
+    def del_data(self,e):
+        self.page.client_storage.clear()
+        self.page.go("/")
+        
     def modif(self, e):
         # Limpiar la columna y mostrar los campos de modificación
         self.cont.content=None
@@ -100,6 +103,16 @@ class Profile:
                 shadow_color=ft.colors.BLUE_GREY_900  # Sombras más marcadas
             )
         )
+        self.btn_del_data = ft.ElevatedButton(
+            "Borrar datos ",
+            on_click=self.del_data,
+            style=ft.ButtonStyle(
+                bgcolor=ft.colors.RED_300,
+                color=ft.colors.WHITE,
+                shape=ft.RoundedRectangleBorder(radius=10),  # Borde redondeado para el botón
+                shadow_color=ft.colors.BLUE_GREY_900  # Sombras más marcadas
+            )
+        )
 
         # Crear la vista del perfil con estilo mejorado
         self.cont = ft.Container(
@@ -113,7 +126,7 @@ class Profile:
                 ft.Text(value=f"Email: {self.email}", color=ft.colors.BLACK, size=16),
                 ft.Divider(height=1, color=ft.colors.BLUE_GREY_200),
                 ft.Text(value=f"Género: {self.gender}", color=ft.colors.BLACK, size=16),
-                self.btn_mod
+                self.btn_mod , self.btn_del_data
             ], spacing=10),  # Añadir espacio entre los elementos
             margin=10,
             bgcolor=ft.colors.LIGHT_BLUE_50,  # Fondo azul claro
