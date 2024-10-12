@@ -15,7 +15,7 @@ class Rote:
         self.page = page
         self.page.on_route_change = self.route_change
         self.page.on_view_pop = self.view_pop
-        self.page.client_storage.clear()
+        ##self.page.client_storage.clear()
         # Verificar si ya hay un nombre guardado y redirigir según sea necesario
         if self.page.client_storage.contains_key("id"):
             # Redirigir directamente al perfil si ya existe el nombre

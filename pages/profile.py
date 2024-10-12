@@ -29,10 +29,10 @@ class Profile:
         self.name = ft.TextField(label="Nombre", value=self.name, bgcolor=ft.colors.WHITE, border_radius=8)
         self.email = ft.TextField(label="Email", value=self.email, bgcolor=ft.colors.WHITE, border_radius=8)
         self.text_date = ft.Text(value=self.na_date)
-        self.btn_date = ft.ElevatedButton(
-            "Fecha de \nNacimiento",
+        self.btn_date=ft.ElevatedButton(
+            "Fecha de \nNacimiento",width=200,
             icon=ft.icons.CALENDAR_MONTH,
-            on_click=lambda e: self.page.dialog(
+            on_click=lambda e: self.page.open(
                 ft.DatePicker(on_change=self.on_change)
             ),
             style=ft.ButtonStyle(
@@ -40,6 +40,7 @@ class Profile:
                 color=ft.colors.WHITE
             )
         )
+        
 
         # Dropdown para género
         self.gender = ft.Dropdown(

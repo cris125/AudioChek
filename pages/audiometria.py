@@ -106,6 +106,7 @@ class Audiometria():
                         self.page.client_storage.set("res_test_big",self.resul)
                     else:
                         self.page.client_storage.set("res_test_small",self.resul)
+                    print(self.resul)
                     self.page.go("/res")  # Si llegamos al final, mostrar resultados
                     return
         else:
@@ -127,7 +128,9 @@ class Audiometria():
                             self.page.client_storage.set("res_test_big",self.resul)
                         else:
                             self.page.client_storage.set("res_test_small",self.resul)
+                        print(self.resul)
                         self.page.go("/res")  # Si llegamos al final, mostrar resultados
+                       
                         return
                     
 
@@ -165,7 +168,7 @@ class Audiometria():
     def start_test(self, e):
         """Inicia la prueba con una cuenta regresiva."""
         test = e.control.data
-        for i in range(1, 2):
+        for i in range(1, 4):
             # Limpiamos y mostramos la cuenta regresiva
             self.row_audiometria.controls.clear()
             self.row_audiometria.controls.append(
