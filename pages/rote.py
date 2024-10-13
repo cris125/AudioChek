@@ -5,6 +5,7 @@ from .navegation import Navegation
 from .profile import Profile
 from .instructions import Instructions
 from .audiometria import Audiometria
+from .results import Results
 class Rote:
     def main(self, page: ft.Page):
         
@@ -61,28 +62,28 @@ class Rote:
             )
         
             
-        elif self.page.route == "/test":
+        elif self.page.route == "/test/audiometria":
             aud=Audiometria()
             ins_nav = LayoutManager(aud.test_audiometria(self.page), nav.navegation(self.page))
             self.page.views.append(
                 ft.View(
-                    "/test",
+                    "/test/audiometria",
                     [ ins_nav.build_layout()],
                 )
             )
             
-        elif self.page.route== "/test/audiometria":
-            ins=Instructions()
-            ins_nav = LayoutManager(ins.instructions(self.page), nav.navegation(self.page))
+        elif self.page.route== "/test":
+            aud_ins=Audiometria()
+            ins_nav = LayoutManager(aud_ins.audiometria_ins(self.page), nav.navegation(self.page))
             self.page.views.append(
                 ft.View(
-                    "/test/audiometria",
-                    [ft.Text(value="xdxd")],
+                    "/test",
+                    [ins_nav.build_layout()],
                 )
             )
         elif self.page.route == "/res":
-            ins=Instructions()
-            ins_nav = LayoutManager(ins.instructions(self.page), nav.navegation(self.page))
+            res=Results()
+            ins_nav = LayoutManager(res.results(self.page), nav.navegation(self.page))
             self.page.views.append(
                 ft.View(
                     "/res",

@@ -2,7 +2,10 @@ import urllib.request
 import json
 
 class Api_functions():
-    
+    def add_aud_sim(self,datos):
+        url = f'{self.url}/add_audiometria'
+        
+        
     def add_user(self, id, name, email, date, gender, occupation):
         # Crear la URL de la API (suponiendo que es la ruta /add_user)
         url = f'{self.url}/add_user'
@@ -41,5 +44,7 @@ class Api_functions():
             return None
         except :
             print(f"Error al enviar la solicitud:")
+            
+            
     def __init__(self) -> None:
         self.url="http://127.0.0.1:5000/"

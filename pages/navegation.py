@@ -1,5 +1,4 @@
 import flet as ft
-
 class Navegation:
     def navegation(self, page: ft.Page):
         self.page = page
@@ -21,7 +20,8 @@ class Navegation:
         # Crear contenedores para cada sección
         sections = []
         for route, (label, icon_name) in texts.items():
-            is_active = route == self.page.route  # Verificar si es la ruta activa
+            # Verificar si es la ruta activa o si es una subruta, como /test/audiometria
+            is_active = self.page.route.startswith(route)  # Verificar si es la ruta o una subruta activa
             text_size = 11 if is_active else 0  # Ajustar tamaño del texto
             container_height = None if is_active else 50  # Alto del contenedor
 

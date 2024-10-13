@@ -12,7 +12,7 @@ class Audiometria():
         self.vol=[0.03,0.07,0.15,0.2,0.4,0.6,0.8,0.9,1]
         self.current_fre=0
         self.current_vol=0
-        self.resul={}
+        self.resul=[]
     import flet as ft
 
     def test_audiometria(self, page: ft.Page):
@@ -91,7 +91,7 @@ class Audiometria():
         self.current_audio.update()
         if data == "yes":
             # Si el usuario escucha el sonido
-            self.resul.update({self.fre_dic[self.fre[self.current_fre]]: [self.vol[self.current_vol] ,balance] })
+            self.resul.append([self.fre_dic[self.fre[self.current_fre]], self.vol[self.current_vol] ,balance] )
             # Avanzar en la frecuencia
             if self.current_fre < len(self.fre) - 1:
                 self.current_fre += 1
@@ -106,15 +106,16 @@ class Audiometria():
                         self.page.client_storage.set("res_test_big",self.resul)
                     else:
                         self.page.client_storage.set("res_test_small",self.resul)
-                    print(self.resul)
+                    
                     self.page.go("/res")  # Si llegamos al final, mostrar resultados
+                    print(self.resul)
                     return
         else:
             # Si no escucha, avanzamos en el volumen
             if self.current_vol < len(self.vol) - 1:
                 self.current_vol += 1
             else:
-                self.resul.update({self.fre_dic[self.fre[self.current_fre]]:[None,balance]})  
+                self.resul.append([self.fre_dic[self.fre[self.current_fre]],None,balance])  
                 if self.current_fre < len(self.fre) - 1:
                     self.current_fre += 1
                     self.current_vol = 0 
@@ -128,9 +129,9 @@ class Audiometria():
                             self.page.client_storage.set("res_test_big",self.resul)
                         else:
                             self.page.client_storage.set("res_test_small",self.resul)
-                        print(self.resul)
+
                         self.page.go("/res")  # Si llegamos al final, mostrar resultados
-                       
+                        print(self.resul)
                         return
                     
 
@@ -169,6 +170,7 @@ class Audiometria():
         """Inicia la prueba con una cuenta regresiva."""
         test = e.control.data
         for i in range(1, 4):
+            
             # Limpiamos y mostramos la cuenta regresiva
             self.row_audiometria.controls.clear()
             self.row_audiometria.controls.append(
@@ -185,6 +187,7 @@ class Audiometria():
                 )
             )
             self.page.update()
+            time.sleep(1)
 
         if test:  # Prueba grande
             self.audiometria_test_big()
@@ -240,7 +243,7 @@ class Audiometria():
         # Crear la imagen que se va a actualizar
         self.image = ft.Image(
             src=self.images[self.numImg],
-            width=page.width - 50,
+            width=350,
             fit=ft.ImageFit.CONTAIN,
         )
         

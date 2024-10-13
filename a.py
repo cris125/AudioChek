@@ -1,45 +1,56 @@
-from flask import Flask, request, jsonify
+import flet as ft
 
-app = Flask(__name__)
+class State:
+    toggle = True
 
-# Lista para simular una base de datos en memoria
-usuarios = []
+s = State()
 
-# Método para añadir un nuevo usuario
-def add_user(id, name, email, date, gender, ocupation):
-    # Crear un diccionario con los datos del usuario
-    nuevo_usuario = {
-        'id': id,
-        'name': name,
-        'email': email,
-        'date': date,
-        'gender': gender,
-        'ocupation': ocupation
-    }
+def main(page: ft.Page):
+    # Datos desordenados
+    data_points = [
+        ft.LineChartDataPoint(x=10000, y=0.03), 
+        ft.LineChartDataPoint(x=8000, y=0.03), 
+        ft.LineChartDataPoint(x=12000, y=0.03),
+        ft.LineChartDataPoint(x=16000, y=0.2),
+        ft.LineChartDataPoint(x=19500, y=0.03), 
+        ft.LineChartDataPoint(x=17000, y=0.4), 
+        ft.LineChartDataPoint(x=18000, y=0.4), 
+        ft.LineChartDataPoint(x=19000, y=1), 
+        ft.LineChartDataPoint(x=20000, y=1)
+    ]
+
+    # Ordenar los puntos por el valor de x
+    data_points_sorted = sorted(data_points, key=lambda point: point.x)
+
+    # Crear el gráfico con los datos ordenados
+    data = [
+        ft.LineChartData(
+            data_points=data_points_sorted,
+            stroke_width=8,
+            color=ft.colors.LIGHT_GREEN,
+            curved=True,
+            stroke_cap_round=True,
+        )
+    ]
     
-    # Añadir el usuario a la lista (simulando el guardado en una base de datos)
-    usuarios.append(nuevo_usuario)
-    
-    return {'message': f'Usuario {name} agregado con éxito'}, 201
+    chart = ft.LineChart(
+        data_series=data,
+        border=ft.Border(
+            bottom=ft.BorderSide(4, ft.colors.with_opacity(0.5, ft.colors.ON_SURFACE))
+        ),
+        left_axis=ft.ChartAxis(
+            labels_size=40,
+        ),
+        bottom_axis=ft.ChartAxis(
+            labels_size=32,
+        ),
+        min_y=0,
+        max_y=1,
+        min_x=0,
+        max_x=20000,
+        expand=True,
+    )
 
-# Ruta para manejar la solicitud POST y llamar a add_user
-@app.route('/add_user', methods=['POST'])
-def api_add_user():
-    # Verificar si los datos llegan en formato JSON
-    if request.is_json:
-        data = request.json
-        id_un = data.get('id')
-        name = data.get('name')
-        email = data.get('email')
-        date = data.get('date')
-        gender = data.get('gender')
-        ocupation = data.get('occupation')
+    page.add(chart)
 
-        # Llamar al método add_user con los parámetros proporcionados
-        result = add_user(id=id_un, name=name, email=email, date=date, gender=gender, ocupation=ocupation)
-        return jsonify(result)
-    else:
-        return jsonify({'error': 'La solicitud no contiene JSON válido'}), 400
-
-if __name__ == '__main__':
-    app.run(debug=True)
+ft.app(main)

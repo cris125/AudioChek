@@ -1,5 +1,5 @@
 import flet as ft
-
+from api.api_functions import Api_functions
 class Profile:
     def on_change(self, e):
         # Actualizar la fecha seleccionada en el campo correspondiente
@@ -13,7 +13,13 @@ class Profile:
         self.page.client_storage.set("date", self.text_date.value)
         self.page.client_storage.set("gender", self.gender.value)
         self.page.client_storage.set("occupation", self.occupation.value)
-
+        api=Api_functions()
+        api.add_user(id=self.page.client_storage.get("id"),
+                     name=self.page.client_storage.get("name"),
+                     email=self.page.client_storage.get("email"),
+                     date=self.page.client_storage.get("date"),
+                     gender=self.page.client_storage.get("gender"),
+                     occupation=self.page.client_storage.get("occupation"),)
         # Limpiar la columna y cargar el perfil actualizado
         self.page.go("/ins")
         self.page.go("/per")
@@ -30,7 +36,7 @@ class Profile:
         self.email = ft.TextField(label="Email", value=self.email, bgcolor=ft.colors.WHITE, border_radius=8)
         self.text_date = ft.Text(value=self.na_date)
         self.btn_date=ft.ElevatedButton(
-            "Fecha de \nNacimiento",width=200,
+            "Fecha de \nNacimiento",width=150,
             icon=ft.icons.CALENDAR_MONTH,
             on_click=lambda e: self.page.open(
                 ft.DatePicker(on_change=self.on_change)
@@ -131,7 +137,6 @@ class Profile:
             ], spacing=10),  # Añadir espacio entre los elementos
             margin=10,
             bgcolor=ft.colors.LIGHT_BLUE_50,  # Fondo azul claro
-            width=self.page.width,
             expand=True,
             padding=20,
             border_radius=20,  # Bordes más redondeados
@@ -145,5 +150,5 @@ class Profile:
         )
 
         # Aplicar fondo suave en azul
-        return ft.Row([self.cont], alignment=ft.MainAxisAlignment.CENTER, width=self.page.width)
+        return ft.Row([self.cont], alignment=ft.MainAxisAlignment.CENTER,expand=True)
         
