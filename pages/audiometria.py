@@ -1,6 +1,7 @@
 import flet as ft
 import random 
 import time
+from api.api_functions import Api_functions
 class Audiometria():
     def __init__(self) -> None:
         self.numImg = 0
@@ -104,11 +105,16 @@ class Audiometria():
                 else:
                     if balance == 1 or balance == -1:
                         self.page.client_storage.set("res_test_big",self.resul)
+                        api=Api_functions()
+                        api.add_aud_com(self.resul,self.page.client_storage.get("id"))
+                        
                     else:
                         self.page.client_storage.set("res_test_small",self.resul)
+                        api=Api_functions()
+                        api.add_aud_sim(self.resul,self.page.client_storage.get("id"))
                     
+
                     self.page.go("/res")  # Si llegamos al final, mostrar resultados
-                    print(self.resul)
                     return
         else:
             # Si no escucha, avanzamos en el volumen
@@ -127,11 +133,15 @@ class Audiometria():
                     else:
                         if balance == 1 or balance == -1:
                             self.page.client_storage.set("res_test_big",self.resul)
+                            api=Api_functions()
+                            api.add_aud_com(self.resul,self.page.client_storage.get("id"))
                         else:
                             self.page.client_storage.set("res_test_small",self.resul)
+                            api=Api_functions()
+                            api.add_aud_sim(self.resul,self.page.client_storage.get("id"))
 
                         self.page.go("/res")  # Si llegamos al final, mostrar resultados
-                        print(self.resul)
+                        
                         return
                     
 
@@ -153,7 +163,7 @@ class Audiometria():
                 ft.ElevatedButton("No", on_click=lambda e: self.next_test(e, balance), icon=ft.icons.MUSIC_OFF_SHARP, data="no")
             ])
         )
-        print(self.resul)
+
         self.page.update()
         
 

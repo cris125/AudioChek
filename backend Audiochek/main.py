@@ -122,14 +122,14 @@ def add_audiometria_completa():
     data = request.get_json()
 
     # Verificar si ya existe un registro con el mismo Id_aud_simp
-    audiometria_existente = AudiometriaCompleta.query.filter_by(Id_aud_simp=data['Id_aud_simp']).first()
+    audiometria_existente = AudiometriaCompleta.query.filter_by(Id_aud_comp=data['Id_aud_comp']).first()
 
     if audiometria_existente:
         return jsonify({"message": "El registro ya existe. No se ha realizado ninguna modificación."}), 400
     else:
         # Crear una nueva instancia del modelo AudiometriaCompleta con los datos proporcionados
         nueva_audiometria = AudiometriaCompleta(
-            Id_aud_simp=data['Id_aud_simp'],
+            Id_aud_comp=data['Id_aud_comp'],
             db_max_right_8000=data.get('db_max_right_8000'),
             db_max_left_8000=data.get('db_max_left_8000'),
             db_max_right_10000=data.get('db_max_right_10000'),
@@ -164,7 +164,7 @@ def get_audiometria_completa():
     # Crear una lista con los datos de cada registro
     audiometria_data = [
         {
-            "Id_aud_simp": audiometria.Id_aud_simp,
+            "Id_aud_comp": audiometria.Id_aud_comp,
             "db_max_right_8000": audiometria.db_max_right_8000,
             "db_max_left_8000": audiometria.db_max_left_8000,
             "db_max_right_10000": audiometria.db_max_right_10000,
