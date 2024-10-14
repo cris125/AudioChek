@@ -23,7 +23,7 @@ def generate_stereo_wav_file(frequency, volume, duration, filename):
      # Esperar hasta que termine de reproducirse
 
 # Ejemplo de uso
-for i in [8000,10000,12000,15000,16000,17000,19000,20000]:
+for i in [18000]:
     generate_stereo_wav_file(i, 1, 10, f'{i}.wav')
 
 

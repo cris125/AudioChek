@@ -20,7 +20,6 @@ class Rote:
         )
         self.page.dialog=self.progress
         self.page.on_route_change = self.route_change
-        self.page.on_view_pop = self.view_pop
         ##self.page.client_storage.clear()
         # Verificar si ya hay un nombre guardado y redirigir según sea necesario
         if self.page.client_storage.contains_key("id"):
@@ -102,11 +101,5 @@ class Rote:
         # Actualizar la página para reflejar los cambios
         self.page.update()
 
-    def view_pop(self, view):
-        # Volver a la vista anterior cuando se use el botón de retroceso
-        self.page.views.pop()
-        if len(self.page.views) > 0:
-            top_view = self.page.views[-1]
-            self.page.go(top_view.route)
-        else:
-            self.page.go("/sta")
+
+

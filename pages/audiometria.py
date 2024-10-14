@@ -88,24 +88,28 @@ class Audiometria():
         )
         
         return self.row_audiometria
+    
     def next_test(self, e, balance=0):
         e.control.disabled = True
         data = e.control.data
         self.current_audio.release()
         self.current_audio.update()
+
         if data == "yes":
             # Si el usuario escucha el sonido
             self.resul.append([self.fre_dic[self.fre[self.current_fre]], self.vol[self.current_vol] ,balance] )
             # Avanzar en la frecuencia
             if self.current_fre < len(self.fre) - 1:
                 self.current_fre += 1
-                self.current_vol = 0 
+                self.current_vol = 0        
+                self.update_test(balance)
             else:
                 # si el balance es 1 iniciar la siguente prueba con el balance de 0
                 if balance == 1:
                         self.current_fre = 0
                         self.current_vol = 0 
                         balance=-1
+                        self.update_test(balance)
                 else:
                     if balance == -1:
                         #guarda la prueba larga
@@ -115,6 +119,7 @@ class Audiometria():
                         self.api.add_aud_com(self.resul,self.page.client_storage.get("id"))
                         self.page.dialog.open = False
                         self.page.update()
+                        self.resul=[]
                     else:
                         #guarda la prueba corta
                         self.page.client_storage.set("res_test_small",self.resul)
@@ -123,12 +128,14 @@ class Audiometria():
                         self.api.add_aud_sim(self.resul,self.page.client_storage.get("id"))
                         self.page.dialog.open  = False
                         self.page.update()
+                        self.resul=[]
 
                     self.page.go("/res")  # Si llegamos al final, mostrar resultados
         else:
             # Si no escucha, avanzamos en el volumen
             if self.current_vol < len(self.vol) - 1:
                 self.current_vol += 1
+                self.update_test(balance)
             else:
             # si el volumen ya es el maximo se guarda como none y se avanza a la siguente frecuencia
                 self.resul.append([self.fre_dic[self.fre[self.current_fre]],None,balance])  
@@ -136,11 +143,13 @@ class Audiometria():
                 if self.current_fre < len(self.fre) - 1:
                     self.current_fre += 1
                     self.current_vol = 0 
+                    self.update_test(balance)
                 else:
                     if balance == 1:
                         self.current_fre = 0
                         self.current_vol = 0 
                         balance=-1
+                        self.update_test(balance)
                     else:
                         if balance == -1:
                             self.page.client_storage.set("res_test_big",self.resul)
@@ -149,6 +158,7 @@ class Audiometria():
                             self.api.add_aud_com(self.resul,self.page.client_storage.get("id"))
                             self.page.dialog.open  = False
                             self.page.update()
+                            self.resul=[]
                         else:
                             self.page.client_storage.set("res_test_small",self.resul)
                             self.page.dialog.open  = True
@@ -156,13 +166,14 @@ class Audiometria():
                             self.api.add_aud_sim(self.resul,self.page.client_storage.get("id"))
                             self.page.dialog.open  = False
                             self.page.update()
+                            self.resul=[]
 
                         self.page.go("/res")  # Si llegamos al final, mostrar resultados
                         
                     
 
         # Actualizamos la interfaz con la nueva prueba
-        self.update_test(balance)
+
 
     def update_test(self, balance):
         """Actualiza la interfaz y reproduce el audio con la frecuencia y volumen actual."""
