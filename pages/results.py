@@ -98,14 +98,12 @@ class Results():
             return (chart)
     def results(self,page:ft.Page):
         self.page=page
-        colum=ft.Column([])
-        if self.page.client_storage.get("res_test_big"):
+        colum=ft.Column([],expand=True)
+        if self.page.client_storage.get("res_test_big") != None :
             
             colum.controls.append(
                 ft.Container(content=self.char_data(1),
-                             margin=10,padding=10)
-                
-                )
+                             margin=10,padding=10))
         else:
             continer_big=ft.Container(
                  content=ft.Column([
@@ -129,10 +127,9 @@ class Results():
                     offset=ft.Offset(5, 5)
                 )
             )
-            ft.Container(content=self.char_data(0),
-                             margin=10,padding=10)
+            colum.controls.append(continer_big)
             
-        if self.page.client_storage.get("res_test_small"):
+        if self.page.client_storage.get("res_test_small") != None:
             colum.controls.append(self.char_data(0))
         else:
             continer_small=ft.Container(
@@ -142,7 +139,7 @@ class Results():
                     ft.Icon(name=ft.icons.NO_CELL ,size=30),
                     ft.Text(value="Haz la prueba corta",style=ft.TextThemeStyle.LABEL_MEDIUM, 
                             color=ft.colors.BLACK),
-                 ]),
+                 ],horizontal_alignment=ft.MainAxisAlignment.CENTER),
                 margin=10,
                 bgcolor=ft.colors.LIGHT_BLUE_50,  # Fondo azul claro
                 width=self.page.width/2.5,

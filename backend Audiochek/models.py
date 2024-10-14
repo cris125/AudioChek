@@ -18,7 +18,8 @@ class Usuario(db.Model):
 class AudiometriaSimple(db.Model):
     __tablename__ = 'audiometria_simple'
     
-    Id_aud_simp = db.Column(db.String(300), primary_key=True)  # Hash seguido por la fecha
+    Id_aud_simp = db.Column(db.String(300), nullable=False)  # Hash seguido por la fecha
+    fecha = db.Column(db.String(30), primary_key=True)
     db_max_8000 = db.Column(db.Float, nullable=True)
     db_max_10000 = db.Column(db.Float, nullable=True)
     db_max_12000 = db.Column(db.Float, nullable=True)
@@ -32,7 +33,8 @@ class AudiometriaSimple(db.Model):
 class AudiometriaCompleta(db.Model):
     __tablename__ = 'audimetria_completa'
     
-    Id_aud_comp = db.Column(db.String(300), primary_key=True)
+    Id_aud_comp = db.Column(db.String(300), nullable=False)
+    fecha = db.Column(db.String(30), primary_key=True)
     db_max_right_8000 = db.Column(db.Float, nullable=True)
     db_max_left_8000 = db.Column(db.Float, nullable=True)
     db_max_right_10000 = db.Column(db.Float, nullable=True)

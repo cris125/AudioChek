@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from config import Config
 from models import db, Usuario ,AudiometriaSimple ,AudiometriaCompleta
-
+import os
 app = Flask(__name__)
 
 # Cargar la configuración desde config.py
@@ -64,34 +64,32 @@ def get_users():
 
 
 @app.route('/add_audiometria', methods=['POST'])
-def add_audiometria():
+def add_audiometria_simple():
     data = request.get_json()
-
-    # Verificar si ya existe un registro con el mismo Id_aud_simp
-    audiometria_existente = AudiometriaSimple.query.filter_by(Id_aud_simp=data['Id_aud_simp']).first()
+    # Verificar si ya existe un registro con la misma Id_aud_simp y fecha
+    audiometria_existente = AudiometriaSimple.query.filter_by(fecha=data['fecha']).first()
 
     if audiometria_existente:
-        return jsonify({"message": "El registro ya existe. No se ha realizado ninguna modificación."}), 400
-    else:
-        # Crear una nueva instancia del modelo AudiometriaSimple con los datos proporcionados
-        nueva_audiometria = AudiometriaSimple(
-            Id_aud_simp=data['Id_aud_simp'],
-            db_max_8000=data.get('db_max_8000'),
-            db_max_10000=data.get('db_max_10000'),
-            db_max_12000=data.get('db_max_12000'),
-            db_max_15000=data.get('db_max_15000'),
-            db_max_16000=data.get('db_max_16000'),
-            db_max_17000=data.get('db_max_17000'),
-            db_max_18000=data.get('db_max_18000'),
-            db_max_19000=data.get('db_max_19000'),
-            db_max_20000=data.get('db_max_20000')
-        )
+        return {"error": "Ya existe una audiometría con este ID y fecha."}, 400
 
-        # Añadir el nuevo registro a la base de datos
-        db.session.add(nueva_audiometria)
-        db.session.commit()
+    # Crear un nuevo registro si no existe
+    nueva_audiometria = AudiometriaSimple(
+        Id_aud_simp=data.get('Id_aud_simp'),
+        fecha=data['fecha'],
+        db_max_8000=data.get('db_max_8000'),
+        db_max_10000=data.get('db_max_10000'),
+        db_max_12000=data.get('db_max_12000'),
+        db_max_15000=data.get('db_max_15000'),
+        db_max_16000=data.get('db_max_16000'),
+        db_max_17000=data.get('db_max_17000'),
+        db_max_18000=data.get('db_max_18000'),
+        db_max_19000=data.get('db_max_19000'),
+        db_max_20000=data.get('db_max_20000')
+    )
 
-        return jsonify({"message": "Registro agregado exitosamente"}), 201
+    db.session.add(nueva_audiometria)
+    db.session.commit()
+    return {"message": "Audiometría simple agregada exitosamente."}, 201
 
 # Ruta para obtener todos los registros de la tabla audiometria_simple
 @app.route('/get_audiometria', methods=['GET'])
@@ -102,6 +100,7 @@ def get_audiometria():
     audiometria_data = [
         {
             "Id_aud_simp": audiometria.Id_aud_simp,
+            "fecha":audiometria.fecha,
             "db_max_8000": audiometria.db_max_8000,
             "db_max_10000": audiometria.db_max_10000,
             "db_max_12000": audiometria.db_max_12000,
@@ -120,41 +119,39 @@ def get_audiometria():
 @app.route('/add_audiometria_completa', methods=['POST'])
 def add_audiometria_completa():
     data = request.get_json()
-
-    # Verificar si ya existe un registro con el mismo Id_aud_simp
-    audiometria_existente = AudiometriaCompleta.query.filter_by(Id_aud_comp=data['Id_aud_comp']).first()
+    # Verificar si ya existe un registro con la misma Id_aud_comp y fecha
+    audiometria_existente = AudiometriaCompleta.query.filter_by( fecha=data['fecha']).first()
 
     if audiometria_existente:
-        return jsonify({"message": "El registro ya existe. No se ha realizado ninguna modificación."}), 400
-    else:
-        # Crear una nueva instancia del modelo AudiometriaCompleta con los datos proporcionados
-        nueva_audiometria = AudiometriaCompleta(
-            Id_aud_comp=data['Id_aud_comp'],
-            db_max_right_8000=data.get('db_max_right_8000'),
-            db_max_left_8000=data.get('db_max_left_8000'),
-            db_max_right_10000=data.get('db_max_right_10000'),
-            db_max_left_10000=data.get('db_max_left_10000'),
-            db_max_right_12000=data.get('db_max_right_12000'),
-            db_max_left_12000=data.get('db_max_left_12000'),
-            db_max_right_15000=data.get('db_max_right_15000'),
-            db_max_left_15000=data.get('db_max_left_15000'),
-            db_max_right_16000=data.get('db_max_right_16000'),
-            db_max_left_16000=data.get('db_max_left_16000'),
-            db_max_right_17000=data.get('db_max_right_17000'),
-            db_max_left_17000=data.get('db_max_left_17000'),
-            db_max_right_18000=data.get('db_max_right_18000'),
-            db_max_left_18000=data.get('db_max_left_18000'),
-            db_max_right_19000=data.get('db_max_right_19000'),
-            db_max_left_19000=data.get('db_max_left_19000'),
-            db_max_right_20000=data.get('db_max_right_20000'),
-            db_max_left_20000=data.get('db_max_left_20000')
-        )
+        return {"error": "Ya existe una audiometría completa con este ID y fecha."}, 400
 
-        # Añadir el nuevo registro a la base de datos
-        db.session.add(nueva_audiometria)
-        db.session.commit()
+    # Crear un nuevo registro si no existe
+    nueva_audiometria = AudiometriaCompleta(
+        Id_aud_comp=data.get('Id_aud_comp'),
+        fecha=data['fecha'],
+        db_max_right_8000=data.get('db_max_right_8000'),
+        db_max_left_8000=data.get('db_max_left_8000'),
+        db_max_right_10000=data.get('db_max_right_10000'),
+        db_max_left_10000=data.get('db_max_left_10000'),
+        db_max_right_12000=data.get('db_max_right_12000'),
+        db_max_left_12000=data.get('db_max_left_12000'),
+        db_max_right_15000=data.get('db_max_right_15000'),
+        db_max_left_15000=data.get('db_max_left_15000'),
+        db_max_right_16000=data.get('db_max_right_16000'),
+        db_max_left_16000=data.get('db_max_left_16000'),
+        db_max_right_17000=data.get('db_max_right_17000'),
+        db_max_left_17000=data.get('db_max_left_17000'),
+        db_max_right_18000=data.get('db_max_right_18000'),
+        db_max_left_18000=data.get('db_max_left_18000'),
+        db_max_right_19000=data.get('db_max_right_19000'),
+        db_max_left_19000=data.get('db_max_left_19000'),
+        db_max_right_20000=data.get('db_max_right_20000'),
+        db_max_left_20000=data.get('db_max_left_20000')
+    )
 
-        return jsonify({"message": "Registro agregado exitosamente"}), 201
+    db.session.add(nueva_audiometria)
+    db.session.commit()
+    return {"message": "Audiometría completa agregada exitosamente."}, 201
 
 # Ruta para obtener todos los registros de la tabla audimetria_completa
 @app.route('/get_audiometria_completa', methods=['GET'])
@@ -165,6 +162,7 @@ def get_audiometria_completa():
     audiometria_data = [
         {
             "Id_aud_comp": audiometria.Id_aud_comp,
+            "fecha":audiometria.fecha ,
             "db_max_right_8000": audiometria.db_max_right_8000,
             "db_max_left_8000": audiometria.db_max_left_8000,
             "db_max_right_10000": audiometria.db_max_right_10000,
@@ -189,8 +187,10 @@ def get_audiometria_completa():
     return jsonify(audiometria_data), 200
 
 
-# Ejecutar la aplicación
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Crear las tablas si no existen
-    app.run(debug=True)
+        
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host="0.0.0.0", port=port)
+

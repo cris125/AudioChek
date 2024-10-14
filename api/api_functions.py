@@ -74,7 +74,7 @@ class Api_functions():
             if 20000 == dat[0] and -1 == dat[2]:
                 db_max_left_20000=dat[1]
         data={
-            'Id_aud_comp':f"{id}-{self.date()}",
+            'Id_aud_comp':id, "fecha":self.date(),
             'db_max_right_8000':db_max_right_8000,'db_max_left_8000':db_max_left_8000,
             'db_max_right_10000':db_max_right_10000,'db_max_left_10000':db_max_left_10000,
             'db_max_right_12000':db_max_right_12000,'db_max_left_12000':db_max_left_12000,
@@ -141,8 +141,8 @@ class Api_functions():
                 db_max_20000=dat[1]
             #if dat[0]==8000:
         data = {
-            'Id_aud_simp':f"{id}-{self.date()}"
-            ,'db_max_8000':db_max_8000,'db_max_10000':db_max_10000,'db_max_12000':db_max_12000,'db_max_15000':db_max_15000,'db_max_16000':db_max_16000,'db_max_17000':db_max_17000,'db_max_18000':db_max_18000,'db_max_19000':db_max_19000,'db_max_20000':db_max_20000
+            'Id_aud_simp':id, "fecha":self.date(),
+            'db_max_8000':db_max_8000,'db_max_10000':db_max_10000,'db_max_12000':db_max_12000,'db_max_15000':db_max_15000,'db_max_16000':db_max_16000,'db_max_17000':db_max_17000,'db_max_18000':db_max_18000,'db_max_19000':db_max_19000,'db_max_20000':db_max_20000
         }
         # Convertir los datos en JSON
         json_data = json.dumps(data).encode('utf-8')
@@ -210,4 +210,4 @@ class Api_functions():
             
             
     def __init__(self) -> None:
-        self.url="http://127.0.0.1:5000/"
+        self.url="https://back-end-audiochek.onrender.com/"

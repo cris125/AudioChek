@@ -5,7 +5,7 @@ from api.api_functions import Api_functions
 class Audiometria():
     def __init__(self) -> None:
         self.numImg = 0
-        self.images = ["./assets/hora.png", "./assets/lugar_silencioso.png", "./assets/uso_audifonos.png"]
+        self.images = ["./assets/hora.png", "./assets/vol_max.png", "./assets/lugar_silencioso.png","./assets/uso_audifonos.png"]
         self.fre = ['./assets/8000.wav','./assets/10000.wav','./assets/12000.wav','./assets/12000.wav','./assets/15000.wav','./assets/16000.wav','./assets/17000.wav','./assets/18000.wav','./assets/19000.wav','./assets/20000.wav']
         self.fre_dic={'./assets/8000.wav': 8000,'./assets/10000.wav': 10000,'./assets/12000.wav': 12000,'./assets/15000.wav': 15000,'./assets/16000.wav': 16000,'./assets/17000.wav': 17000,'./assets/18000.wav': 18000,'./assets/19000.wav': 19000,'./assets/20000.wav': 20000}
 
@@ -14,6 +14,8 @@ class Audiometria():
         self.current_fre=0
         self.current_vol=0
         self.resul=[]
+        self.api=Api_functions()
+
     import flet as ft
 
     def test_audiometria(self, page: ft.Page):
@@ -87,6 +89,7 @@ class Audiometria():
         
         return self.row_audiometria
     def next_test(self, e, balance=0):
+        e.control.disabled = True
         data = e.control.data
         self.current_audio.release()
         self.current_audio.update()
@@ -98,30 +101,38 @@ class Audiometria():
                 self.current_fre += 1
                 self.current_vol = 0 
             else:
+                # si el balance es 1 iniciar la siguente prueba con el balance de 0
                 if balance == 1:
                         self.current_fre = 0
                         self.current_vol = 0 
                         balance=-1
                 else:
-                    if balance == 1 or balance == -1:
+                    if balance == -1:
+                        #guarda la prueba larga
                         self.page.client_storage.set("res_test_big",self.resul)
-                        api=Api_functions()
-                        api.add_aud_com(self.resul,self.page.client_storage.get("id"))
-                        
+                        self.page.dialog.open = True
+                        self.page.update()
+                        self.api.add_aud_com(self.resul,self.page.client_storage.get("id"))
+                        self.page.dialog.open = False
+                        self.page.update()
                     else:
+                        #guarda la prueba corta
                         self.page.client_storage.set("res_test_small",self.resul)
-                        api=Api_functions()
-                        api.add_aud_sim(self.resul,self.page.client_storage.get("id"))
-                    
+                        self.page.dialog.open = True
+                        self.page.update()
+                        self.api.add_aud_sim(self.resul,self.page.client_storage.get("id"))
+                        self.page.dialog.open  = False
+                        self.page.update()
 
                     self.page.go("/res")  # Si llegamos al final, mostrar resultados
-                    return
         else:
             # Si no escucha, avanzamos en el volumen
             if self.current_vol < len(self.vol) - 1:
                 self.current_vol += 1
             else:
+            # si el volumen ya es el maximo se guarda como none y se avanza a la siguente frecuencia
                 self.resul.append([self.fre_dic[self.fre[self.current_fre]],None,balance])  
+                
                 if self.current_fre < len(self.fre) - 1:
                     self.current_fre += 1
                     self.current_vol = 0 
@@ -131,18 +142,23 @@ class Audiometria():
                         self.current_vol = 0 
                         balance=-1
                     else:
-                        if balance == 1 or balance == -1:
+                        if balance == -1:
                             self.page.client_storage.set("res_test_big",self.resul)
-                            api=Api_functions()
-                            api.add_aud_com(self.resul,self.page.client_storage.get("id"))
+                            self.page.dialog.open  = True
+                            self.page.update()
+                            self.api.add_aud_com(self.resul,self.page.client_storage.get("id"))
+                            self.page.dialog.open  = False
+                            self.page.update()
                         else:
                             self.page.client_storage.set("res_test_small",self.resul)
-                            api=Api_functions()
-                            api.add_aud_sim(self.resul,self.page.client_storage.get("id"))
+                            self.page.dialog.open  = True
+                            self.page.update()
+                            self.api.add_aud_sim(self.resul,self.page.client_storage.get("id"))
+                            self.page.dialog.open  = False
+                            self.page.update()
 
                         self.page.go("/res")  # Si llegamos al final, mostrar resultados
                         
-                        return
                     
 
         # Actualizamos la interfaz con la nueva prueba
@@ -150,18 +166,35 @@ class Audiometria():
 
     def update_test(self, balance):
         """Actualiza la interfaz y reproduce el audio con la frecuencia y volumen actual."""
-        txt_test = ft.Text(value="Presiona 'Sí' si escuchas el sonido, 'No' si no lo escuchas", size=25)
-        # Limpiamos el contenido anterior y mostramos la nueva prueba
+        
+        cont=ft.Container(
+                    content=ft.Column([
+                        ft.Text(value=f"Presiona 'Sí' si escuchas el sonido, No' si no lo escuchas",
+                                    style=ft.TextThemeStyle.LABEL_MEDIUM, 
+                                    color=ft.colors.WHITE, 
+                                    size=20,expand=True),
+
+                        ],alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,expand=True
+                ),
+                    
+                    padding=20,
+                    border_radius=10,
+                    bgcolor=ft.colors.LIGHT_BLUE_500,
+                    height=self.page.height/4,
+                    alignment=ft.alignment.center,
+                )
+                # Limpiamos el contenido anterior y mostramos la nueva prueba
         self.row_audiometria.controls.clear()
         
         self.current_audio=ft.Audio(src=self.fre[self.current_fre], autoplay=True, volume=self.vol[self.current_vol], balance=balance)
         self.row_audiometria.controls.append(
             ft.Column([
-                txt_test,
+                cont,
                 self.current_audio,
                 ft.ElevatedButton("Sí", icon=ft.icons.CHECK, on_click=lambda e: self.next_test(e, balance), data="yes"),
                 ft.ElevatedButton("No", on_click=lambda e: self.next_test(e, balance), icon=ft.icons.MUSIC_OFF_SHARP, data="no")
-            ])
+            ],expand=True)
         )
 
         self.page.update()

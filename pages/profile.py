@@ -8,6 +8,7 @@ class Profile:
 
     def save(self, e):
         # Guardar la información del perfil en el almacenamiento del cliente
+        e.control.disabled = True 
         self.page.client_storage.set("name", self.name.value)
         self.page.client_storage.set("email", self.email.value)
         self.page.client_storage.set("date", self.text_date.value)

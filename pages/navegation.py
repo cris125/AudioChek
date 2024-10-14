@@ -2,7 +2,6 @@ import flet as ft
 class Navegation:
     def navegation(self, page: ft.Page):
         self.page = page
-
         # Crear diccionarios para gestionar los textos y rutas
         texts = {
             "/ins": ("Instrucciones", ft.icons.INTEGRATION_INSTRUCTIONS_OUTLINED),
@@ -57,4 +56,3 @@ class Navegation:
 
     def on_click(self, e):
         self.page.go(f"/{e.control.data}")
-        print(e.control.data.capitalize())

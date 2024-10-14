@@ -14,6 +14,11 @@ class Rote:
         page.window.width = 400
         page.theme_mode = ft.ThemeMode.LIGHT
         self.page = page
+        self.progress=ft.AlertDialog(
+            content=ft.Container(content=ft.Row([ft.Text("Cargando..."),ft.ProgressRing()],alignment=ft.MainAxisAlignment.SPACE_BETWEEN)),
+            modal=True,  # Evita que el usuario lo cierre al hacer clic fuera
+        )
+        self.page.dialog=self.progress
         self.page.on_route_change = self.route_change
         self.page.on_view_pop = self.view_pop
         ##self.page.client_storage.clear()
