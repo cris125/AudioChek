@@ -63,4 +63,4 @@ class Instructions():
             )
             ,
             self.row
-        ],expand=True)
+        ],expand=True,scroll=True)

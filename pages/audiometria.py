@@ -315,7 +315,7 @@ class Audiometria():
                 ft.Row([self.image]),  # Usar la imagen creada
                 # Poner el botón al final del ancho disponible
                 ft.Row([btn_next], alignment=ft.MainAxisAlignment.END) 
-            ])
+            ],scroll=True)
         ], alignment=ft.MainAxisAlignment.CENTER)  # Centrar la columna en la pantalla
         
         return self.row

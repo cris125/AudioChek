@@ -141,4 +141,4 @@ class Start:
             )
         )
         
-        return ft.Column([continer_2,continer],expand=True)
+        return ft.Column([continer_2,continer],expand=True,scroll=True)
