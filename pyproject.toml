@@ -1,0 +1,2 @@
+[tool.flet.app]
+icon = "assets/app_icon.png"

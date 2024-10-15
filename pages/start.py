@@ -77,7 +77,7 @@ class Start:
             "Jardinero/a", "Cocinero/a", "Desarrollador/a web", "Diseñador/a gráfico", 
             "Estudiante", "Trabajador independiente", "Trabajador de la construcción", 
             "Músico/a", "DJ", "Trabajador de fábrica", "Piloto/a", "Personal de aeropuerto", 
-            "Leñador/a", "Conductor de ambulancia"
+            "Leñador/a", "Conductor de ambulancia","otro"
         ]
         options_ocupation = [ft.dropdown.Option(i) for i in ocupaciones]
         self.occupation = ft.Dropdown(

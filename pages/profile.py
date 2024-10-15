@@ -65,9 +65,16 @@ class Profile:
         )
 
         # Dropdown para ocupación
-        occupations = ["Ingeniero/a de sistemas", "Administrador/a de empresas", "Médico/a", 
-                       "Ingeniero/a civil", "Psicólogo/a", "Contador/a", "Abogado/a", 
-                       "Enfermero/a", "Arquitecto/a", "Economista", "Estudiante", "Otros"]
+        occupations = ocupaciones = [
+            "Ingeniero/a de sistemas", "Administrador/a de empresas", "Médico/a", 
+            "Ingeniero/a civil", "Psicólogo/a", "Contador/a", "Abogado/a", "Enfermero/a", 
+            "Arquitecto/a", "Economista", "Carpintero/a", "Fontanero/a", "Electricista", 
+            "Mecánico/a", "Panadero/a", "Albañil", "Pintor/a", "Soldador/a", 
+            "Jardinero/a", "Cocinero/a", "Desarrollador/a web", "Diseñador/a gráfico", 
+            "Estudiante", "Trabajador independiente", "Trabajador de la construcción", 
+            "Músico/a", "DJ", "Trabajador de fábrica", "Piloto/a", "Personal de aeropuerto", 
+            "Leñador/a", "Conductor de ambulancia","otro"
+        ]
         self.occupation = ft.Dropdown(
             label="Ocupación",
             options=[ft.dropdown.Option(occ) for occ in occupations],

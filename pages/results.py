@@ -79,17 +79,17 @@ class Results():
             
             data=[
                 ft.LineChartData(
-                data_points = points_le_sorted,
-                stroke_width=3,
-                color=ft.colors.LIGHT_GREEN,
-                curved=False,
-                stroke_cap_round=True,),
+                    data_points = points_le_sorted,
+                    stroke_width=3,
+                    color=ft.colors.RED,
+                    curved=False,
+                    stroke_cap_round=True,),
                 ft.LineChartData(
-                data_points = points_ri_sorted,
-                stroke_width=3,
-                color=ft.colors.RED,
-                curved=False,
-                stroke_cap_round=True,)]
+                    data_points = points_ri_sorted,
+                    stroke_width=3,
+                    color=ft.colors.BLUE,
+                    curved=False,
+                    stroke_cap_round=True,)]
         else:
              
             res_test_smal=self.page.client_storage.get("res_test_small")
@@ -102,9 +102,10 @@ class Results():
             data=[ft.LineChartData(
                 data_points = data_points_sorted,
                 stroke_width=3,
-                color=ft.colors.LIGHT_GREEN,
+                color=ft.colors.BLUE,
                 curved=False,
                 stroke_cap_round=True,)]
+            
         chart = ft.LineChart(
                 data_series=data,
                 border=ft.Border(
@@ -145,11 +146,13 @@ class Results():
                                     ],alignment=ft.alignment.center),  
                             self.char_data(1),
                             ft.Row([ft.Text(value=f"Derecha %{big_r}",weight=ft.FontWeight.BOLD),
-                                    ft.Text(value=self.msg_es(big_r)[1],color=self.msg_es(big_r)[0],weight=ft.FontWeight.BOLD),]
+                                    ft.Text(value=self.msg_es(big_r)[1],color=self.msg_es(big_r)[0],weight=ft.FontWeight.BOLD),
+                                    ft.Icon(name=ft.icons.AREA_CHART_SHARP,color=ft.colors.BLUE)]
                                     ,alignment=ft.alignment.center)  ,
                             ft.Row([
                                     ft.Text(value=f"Izquierda %{big_l} ",weight=ft.FontWeight.BOLD),
-                                    ft.Text(value=self.msg_es(big_r)[1],color=self.msg_es(big_r)[0],weight=ft.FontWeight.BOLD)]
+                                    ft.Text(value=self.msg_es(big_r)[1],color=self.msg_es(big_r)[0],weight=ft.FontWeight.BOLD),
+                                    ft.Icon(name=ft.icons.AREA_CHART_SHARP,color=ft.colors.RED)]
                                     ,alignment=ft.alignment.center)                  
                             ],alignment=ft.MainAxisAlignment.CENTER,
                             ),
@@ -191,7 +194,8 @@ class Results():
                                     ],alignment=ft.alignment.center),
                             self.char_data(0),
                             ft.Row([ft.Text(value=f"Nivel audicion %{small}",weight=ft.FontWeight.BOLD),
-                                    ft.Text(value=self.msg_es(small)[1],color=self.msg_es(small)[0],weight=ft.FontWeight.BOLD)
+                                    ft.Text(value=self.msg_es(small)[1],color=self.msg_es(small)[0],weight=ft.FontWeight.BOLD),
+                                    ft.Icon(name=ft.icons.AREA_CHART_SHARP,color=ft.colors.BLUE)
                                     ],alignment=ft.alignment.center),
                                     
                             ],alignment=ft.MainAxisAlignment.CENTER,

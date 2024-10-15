@@ -36,8 +36,10 @@ class Rote:
         # Instanciar las clases necesarias
         nav = Navegation()
         # Ruta para la pantalla de inicio (solo si el nombre no está guardado)
+        
         if self.page.route == "/sta":
             st=Start()
+            self.page.views.clear()
             self.page.views.append(
                 ft.View(
                     "/sta",
@@ -48,6 +50,7 @@ class Rote:
         elif self.page.route == "/per":
             prof = Profile()
             profile_nav = LayoutManager(prof.profile(self.page), nav.navegation(self.page))
+            self.page.views.clear()
             self.page.views.append(
                 ft.View(
                     "/per",
@@ -58,6 +61,7 @@ class Rote:
         elif self.page.route == "/ins":
             ins=Instructions()
             ins_nav = LayoutManager(ins.instructions(self.page), nav.navegation(self.page))
+            self.page.views.clear()
             self.page.views.append(
                 ft.View(
                     "/ins",
@@ -69,6 +73,7 @@ class Rote:
         elif self.page.route == "/test/audiometria":
             aud=Audiometria()
             ins_nav = LayoutManager(aud.test_audiometria(self.page), nav.navegation(self.page))
+            self.page.views.clear()
             self.page.views.append(
                 ft.View(
                     "/test/audiometria",
@@ -79,6 +84,7 @@ class Rote:
         elif self.page.route== "/test":
             aud_ins=Audiometria()
             ins_nav = LayoutManager(aud_ins.audiometria_ins(self.page), nav.navegation(self.page))
+            self.page.views.clear()
             self.page.views.append(
                 ft.View(
                     "/test",
@@ -88,6 +94,7 @@ class Rote:
         elif self.page.route == "/res":
             res=Results()
             ins_nav = LayoutManager(res.results(self.page), nav.navegation(self.page))
+            self.page.views.clear()
             self.page.views.append(
                 ft.View(
                     "/res",
