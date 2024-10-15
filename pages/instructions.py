@@ -23,7 +23,7 @@ class Instructions():
         # Crear la imagen que se va a actualizar
         self.image = ft.Image(
             src=self.images[self.numImg],
-            width=page.width-100,
+            width=page.width-125,
 
             fit=ft.ImageFit.CONTAIN,
         )
@@ -41,4 +41,26 @@ class Instructions():
             ])
         ], alignment=ft.MainAxisAlignment.CENTER)  # Centrar la columna en la pantalla
         
-        return self.row
+        return ft.Column([
+            ft.Container(
+                content=ft.Row(
+                    [ft.Text(value="AudioChek",style=ft.TextThemeStyle.TITLE_MEDIUM, 
+                            weight=ft.FontWeight.BOLD),
+                     ft.Image(src="./assets/logo.png" ,width=50)],alignment=ft.MainAxisAlignment.SPACE_BETWEEN
+                ),
+            margin=10,
+            bgcolor=ft.colors.WHITE,  # Fondo azul claro
+            height=75,
+            padding=20,
+            border_radius=20,  # Bordes más redondeados
+            border=ft.border.all(2, ft.colors.BLUE_GREY_300),  # Bordes gris claro
+            shadow=ft.BoxShadow(  # Añadir sombra suave
+                spread_radius=2,
+                blur_radius=15,
+                color=ft.colors.BLUE_GREY_400,
+                offset=ft.Offset(5, 5)
+            )
+            )
+            ,
+            self.row
+        ],expand=True)
