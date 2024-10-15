@@ -15,6 +15,8 @@ class Profile:
         self.page.client_storage.set("gender", self.gender.value)
         self.page.client_storage.set("occupation", self.occupation.value)
         api=Api_functions()
+        self.page.dialog.open = True
+        self.page.update()
         api.add_user(id=self.page.client_storage.get("id"),
                      name=self.page.client_storage.get("name"),
                      email=self.page.client_storage.get("email"),
@@ -22,7 +24,8 @@ class Profile:
                      gender=self.page.client_storage.get("gender"),
                      occupation=self.page.client_storage.get("occupation"),)
         # Limpiar la columna y cargar el perfil actualizado
-        self.page.go("/ins")
+        self.page.dialog.open = False
+        self.page.update()
         self.page.go("/per")
     def del_data(self,e):
         self.page.client_storage.clear()
