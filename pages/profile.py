@@ -97,7 +97,7 @@ class Profile:
                     color=ft.colors.WHITE
                 )
             )], alignment=ft.MainAxisAlignment.CENTER)
-        ])
+        ],scroll=True)
         self.page.update()
 
     def profile(self, page: ft.Page):
@@ -145,7 +145,7 @@ class Profile:
                 ft.Divider(height=1, color=ft.colors.BLUE_GREY_200),
                 ft.Text(value=f"Género: {self.gender}", color=ft.colors.BLACK, size=16),
                 self.btn_mod , self.btn_del_data
-            ], spacing=10),  # Añadir espacio entre los elementos
+            ], spacing=10,scroll=True),  # Añadir espacio entre los elementos
             margin=10,
             bgcolor=ft.colors.LIGHT_BLUE_50,  # Fondo azul claro
             expand=True,
