@@ -8,7 +8,6 @@ from .audiometria import Audiometria
 from .results import Results
 class Rote:
     def main(self, page: ft.Page):
-        
         page.title = "AudioCheck"
         page.vertical_alignment = ft.MainAxisAlignment.CENTER
         page.window.width = 400
