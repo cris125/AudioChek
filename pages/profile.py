@@ -26,7 +26,9 @@ class Profile:
         # Limpiar la columna y cargar el perfil actualizado
         self.page.dialog.open = False
         self.page.update()
+        self.page.go("/")
         self.page.go("/per")
+
     def del_data(self,e):
         self.page.client_storage.clear()
         self.page.go("/")
